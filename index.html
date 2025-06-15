@@ -1,0 +1,864 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zach Kehoe | InfoSec Engineer</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0f172a;
+      --secondary: #1e293b;
+      --accent: #3b82f6;
+      --accent-hover: #2563eb;
+      --text-main: #f1f5f9;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --card-bg: rgba(30, 41, 59, 0.7);
+      --border: #334155;
+      --transition: all 0.3s ease;
+      --shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.2), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      color: var(--text-main);
+      background-color: var(--primary);
+      line-height: 1.6;
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(30, 41, 59, 0.15) 0%, rgba(30, 41, 59, 0) 20%),
+        radial-gradient(circle at 90% 80%, rgba(59, 130, 246, 0.1) 0%, rgba(59, 130, 246, 0) 20%);
+      background-attachment: fixed;
+      min-height: 100vh;
+    }
+    
+    .site-wrapper {
+      display: flex;
+      min-height: 100vh;
+      max-width: 1400px;
+      margin: 0 auto;
+      position: relative;
+    }
+    
+    /* Sidebar */
+    .sidebar {
+      width: 320px;
+      background-color: var(--secondary);
+      padding: 2.5rem 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      z-index: 10;
+      box-shadow: var(--shadow-lg);
+      transition: var(--transition);
+    }
+    
+    .sidebar-content {
+      display: flex;
+      flex-direction: column;
+      gap: 1.8rem;
+    }
+    
+    .profile-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .profile-image {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
+      border: 3px solid var(--accent);
+      box-shadow: var(--shadow);
+    }
+    
+    .profile-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    
+    .name {
+      font-size: 2.1rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 0.25rem;
+      letter-spacing: -0.5px;
+    }
+    
+    .role {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      position: relative;
+      display: inline-block;
+    }
+    
+    .role::after {
+      content: "";
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 50px;
+      height: 3px;
+      background: var(--accent);
+      border-radius: 3px;
+    }
+    
+    .summary {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      margin-top: 1rem;
+      line-height: 1.7;
+    }
+    
+    .nav-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+    
+    .nav-links a {
+      text-decoration: none;
+      color: var(--text-secondary);
+      font-weight: 500;
+      padding: 0.8rem 1.2rem;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      transition: var(--transition);
+    }
+    
+    .nav-links a:hover, .nav-links a.active {
+      color: var(--text-main);
+      background: var(--card-bg);
+      transform: translateX(5px);
+    }
+    
+    .nav-links a:hover i, .nav-links a.active i {
+      color: var(--accent);
+    }
+    
+    .social-links {
+      display: flex;
+      gap: 1.2rem;
+      justify-content: center;
+      margin-top: 1.5rem;
+      flex-wrap: wrap;
+    }
+    
+    .social-links a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--card-bg);
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: var(--transition);
+      font-size: 1.1rem;
+    }
+    
+    .social-links a:hover {
+      color: var(--text-main);
+      background: var(--accent);
+      transform: translateY(-3px);
+    }
+    
+    /* Main content */
+    .content {
+      flex: 1;
+      padding: 3rem 4rem;
+      position: relative;
+    }
+    
+    section {
+      margin-bottom: 3.5rem;
+      position: relative;
+    }
+    
+    section::before {
+      content: "";
+      position: absolute;
+      top: -1.5rem;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--border), transparent);
+    }
+    
+    section:first-child::before {
+      display: none;
+    }
+    
+    h2 {
+      color: var(--text-main);
+      font-size: 1.8rem;
+      margin-bottom: 2rem;
+      position: relative;
+      display: inline-block;
+      font-weight: 700;
+    }
+    
+    h2::after {
+      content: "";
+      position: absolute;
+      bottom: -8px;
+      left: 0;
+      width: 50px;
+      height: 4px;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+    
+    h3 {
+      color: var(--text-main);
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    
+    p {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      margin-bottom: 1.5rem;
+      line-height: 1.8;
+    }
+    
+    /* Experience */
+    .job {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 1.8rem;
+      margin-bottom: 1.8rem;
+      transition: var(--transition);
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .job:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+      border-color: rgba(59, 130, 246, 0.3);
+    }
+    
+    .job::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      width: 4px;
+      background: var(--accent);
+    }
+    
+    .job-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1.2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    
+    .date {
+      font-size: 0.9rem;
+      color: var(--accent);
+      background: rgba(59, 130, 246, 0.1);
+      padding: 0.4rem 0.8rem;
+      border-radius: 20px;
+      font-weight: 500;
+    }
+    
+    .job ul {
+      padding-left: 1.5rem;
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      margin-top: 1rem;
+    }
+    
+    .job li {
+      margin-bottom: 0.7rem;
+      position: relative;
+    }
+    
+    .job li::marker {
+      color: var(--accent);
+    }
+    
+    /* Certifications */
+    .certs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    
+    .cert-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 1.5rem;
+      border: 1px solid var(--border);
+      transition: var(--transition);
+      box-shadow: var(--shadow);
+    }
+    
+    .cert-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+      border-color: rgba(59, 130, 246, 0.3);
+    }
+    
+    .cert-card h3 {
+      color: var(--accent);
+      margin-bottom: 0.5rem;
+      font-size: 1.1rem;
+    }
+    
+    .cert-meta {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+    }
+    
+    .cert-icon {
+      font-size: 2rem;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+    
+    /* Projects */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 1.8rem;
+      margin-top: 1.5rem;
+    }
+    
+    .project-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      transition: var(--transition);
+      box-shadow: var(--shadow);
+    }
+    
+    .project-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+      border-color: rgba(59, 130, 246, 0.3);
+    }
+    
+    .project-image {
+      height: 180px;
+      background: linear-gradient(45deg, #1e293b, #0f172a);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .project-image::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: 
+        linear-gradient(135deg, rgba(59, 130, 246, 0.1) 25%, transparent 25%, transparent 50%, 
+        rgba(59, 130, 246, 0.1) 50%, rgba(59, 130, 246, 0.1) 75%, transparent 75%, transparent);
+      background-size: 20px 20px;
+    }
+    
+    .project-content {
+      padding: 1.5rem;
+    }
+    
+    .project-title {
+      color: var(--text-main);
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.8rem;
+    }
+    
+    .project-desc {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      margin-bottom: 1.2rem;
+    }
+    
+    .project-tech {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 1rem;
+    }
+    
+    .tech-tag {
+      background: rgba(59, 130, 246, 0.1);
+      color: var(--accent);
+      font-size: 0.75rem;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+    }
+    
+    /* Footer */
+    .desktop-footer {
+      text-align: center;
+      margin-top: 2rem;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+    
+    .mobile-footer {
+      display: none;
+    }
+    
+    /* Contact section */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+      margin-top: 1.5rem;
+    }
+    
+    .contact-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 1.5rem;
+      border: 1px solid var(--border);
+      transition: var(--transition);
+      text-align: center;
+    }
+    
+    .contact-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+      border-color: rgba(59, 130, 246, 0.3);
+    }
+    
+    .contact-icon {
+      font-size: 2rem;
+      color: var(--accent);
+      margin-bottom: 1rem;
+    }
+    
+    .contact-card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .contact-card a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      transition: var(--transition);
+    }
+    
+    .contact-card a:hover {
+      color: var(--accent);
+    }
+    
+    /* Responsive */
+    @media screen and (max-width: 1024px) {
+      .sidebar {
+        width: 280px;
+        padding: 2rem 1.5rem;
+      }
+      
+      .content {
+        padding: 2.5rem;
+      }
+    }
+    
+    @media screen and (max-width: 768px) {
+      .site-wrapper {
+        flex-direction: column;
+      }
+      
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        padding: 1.5rem 1rem;
+      }
+      
+      .profile-section {
+        flex-direction: row;
+        text-align: left;
+        gap: 1.5rem;
+        align-items: center;
+        padding-bottom: 1.5rem;
+      }
+      
+      .profile-image {
+        width: 100px;
+        height: 100px;
+        margin-bottom: 0;
+      }
+      
+      .profile-info {
+        flex: 1;
+      }
+      
+      .role::after {
+        left: 0;
+        transform: none;
+      }
+      
+      .content {
+        padding: 2rem 1.5rem;
+      }
+      
+      .desktop-footer {
+        display: none;
+      }
+      
+      .mobile-footer {
+        display: block;
+        text-align: center;
+        margin-top: 3rem;
+        font-size: 0.85rem;
+        color: var(--text-muted);
+      }
+      
+      h2 {
+        font-size: 1.6rem;
+      }
+      
+      .job-header {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+    }
+    
+    @media screen and (max-width: 480px) {
+      .profile-section {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .role::after {
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      
+      .certs-grid,
+      .projects-grid,
+      .contact-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    /* Animations */
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    
+    section {
+      animation: fadeIn 0.6s ease forwards;
+    }
+    
+    .job, .cert-card, .project-card, .contact-card {
+      animation: fadeIn 0.6s ease forwards;
+    }
+    
+    section:nth-child(2) { animation-delay: 0.1s; }
+    section:nth-child(3) { animation-delay: 0.2s; }
+    section:nth-child(4) { animation-delay: 0.3s; }
+    section:nth-child(5) { animation-delay: 0.4s; }
+  </style>
+</head>
+<body>
+  <div class="site-wrapper">
+    <aside class="sidebar">
+      <div class="sidebar-content">
+        <div class="profile-section">
+          <div class="profile-image">
+            <img src="IMG_6583.JPG" alt="Zach Kehoe">
+          </div>
+          <div class="profile-info">
+            <h1 class="name">Zach Kehoe</h1>
+            <h2 class="role">InfoSec Engineer</h2>
+          </div>
+        </div>
+        
+        <p class="summary">I take pride in being a constant learner—growing from my mistakes and always open to feedback.</p>
+        
+        <nav class="nav-links">
+          <a href="#about" class="active">
+            <i class="fas fa-user"></i>
+            <span>About</span>
+          </a>
+          <a href="#experience">
+            <i class="fas fa-briefcase"></i>
+            <span>Experience</span>
+          </a>
+          <a href="#certifications">
+            <i class="fas fa-certificate"></i>
+            <span>Certifications</span>
+          </a>
+          <a href="#projects">
+            <i class="fas fa-code"></i>
+            <span>Projects</span>
+          </a>
+          <a href="#contact">
+            <i class="fas fa-envelope"></i>
+            <span>Contact</span>
+          </a>
+          <a href="resume.pdf" target="_blank">
+            <i class="fas fa-file-pdf"></i>
+            <span>Resume</span>
+          </a>
+        </nav>
+        
+        <div class="social-links">
+          <a href="https://github.com/ghostraptor03?tab=repositories" target="_blank">
+            <i class="fab fa-github"></i>
+          </a>
+          <a href="https://www.linkedin.com/in/zach-kehoe-6855bb266/" target="_blank">
+            <i class="fab fa-linkedin-in"></i>
+          </a>
+        </div>
+      </div>
+      
+      <div class="desktop-footer">
+        <p>© 2025 Zach Kehoe. All rights reserved.</p>
+      </div>
+    </aside>
+
+    <main class="content">
+      <section id="about">
+        <h2>About Me</h2>
+        <p>I'm a Software Engineering student at Iowa State University and an Information Security Engineer Intern at Principal Financial Group. My experience has taught me leadership, adaptability, and responsiveness to feedback in fast-paced environments.</p>
+        <p>I'm passionate about cybersecurity, automation, cloud infrastructure, and the future of artificial intelligence—particularly its implementation in real-world products and services.</p>
+        <p>In my free time, I coach a youth swim team, and enjoy going to the gym. I also enjoy jailbreaking my Nintendo consoles and running Homebrew applications.</p>
+        
+        <div class="contact-grid">
+          <div class="contact-card">
+            <div class="contact-icon">
+              <i class="fas fa-map-marker-alt"></i>
+            </div>
+            <h3>Location</h3>
+            <p>Ames, Iowa</p>
+          </div>
+          
+          <div class="contact-card">
+            <div class="contact-icon">
+              <i class="fas fa-envelope"></i>
+            </div>
+            <h3>Email</h3>
+            <a href="mailto:zachtkehoe@outlook.com">zachtkehoe@outlook.com</a>
+          </div>
+          
+          <div class="contact-card">
+            <div class="contact-icon">
+              <i class="fas fa-graduation-cap"></i>
+            </div>
+            <h3>Education</h3>
+            <p>Iowa State University</p>
+          </div>
+        </div>
+      </section>
+
+      <section id="experience">
+        <h2>Professional Experience</h2>
+        
+        <div class="job">
+          <div class="job-header">
+            <h3>Information Security Engineer Intern – IAM</h3>
+            <span class="date">May 2025 – Present</span>
+          </div>
+          <p class="company">Principal Financial Group</p>
+          <ul>
+            <li>Enforced and scaled IAM tooling for secure access control across AWS infrastructure and internal platforms</li>
+            <li>Collaborated with security teams to implement least-privilege access strategies</li>
+            <li>Developed and secured AWS infrastructure</li>
+            <li>Built and deployed a data product to monitor and eliminate unused Active Directory (AD) accounts</li>
+          </ul>
+        </div>
+        
+        <div class="job">
+          <div class="job-header">
+            <h3>Information Security Engineer Intern – BISO Engineering</h3>
+            <span class="date">May 2024 – Aug 2024</span>
+          </div>
+          <p class="company">Principal Financial Group</p>
+          <ul>
+            <li>Maintained and refactored production codebases for security tooling</li>
+            <li>Designed GitHub Actions workflows for CI/CD and vulnerability scanning</li>
+            <li>Built AWS infrastructure with CDK and automated SaaS integrations</li>
+            <li>Implemented security monitoring solutions for cloud-native applications</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="certifications">
+        <h2>Certifications</h2>
+        
+        <div class="certs-grid">
+          <div class="cert-card">
+            <div class="cert-icon">
+              <i class="fab fa-aws"></i>
+            </div>
+            <h3>AWS Certified Cloud Practitioner</h3>
+            <p>Validated cloud fluency and foundational AWS knowledge</p>
+            <div class="cert-meta">
+              <p><i class="fas fa-calendar"></i> Issued July 2024</p>
+            </div>
+          </div>
+          
+          <div class="cert-card">
+            <div class="cert-icon">
+              <i class="fab fa-aws"></i>
+            </div>
+            <h3>AWS Certified Solutions Architect – Associate</h3>
+            <p>Demonstrated advanced AWS architecture skills</p>
+            <div class="cert-meta">
+              <p><i class="fas fa-calendar"></i> Issued June 2025</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="projects">
+        <h2>Featured Projects</h2>
+        
+        <div class="projects-grid">
+          <div class="project-card">
+            <div class="project-image"></div>
+            <div class="project-content">
+              <h3 class="project-title">Financial News Web Scraper</h3>
+              <p class="project-desc">Engineered an automated newsletter pipeline using AWS architecture. The application scrapes financial news from multiple sources, processes content through OpenAI's GPT-4 for summarization, and generates daily newsletters. Built with AWS CDK to provision and orchestrate Lambda functions and S3 storage, creating a fully managed event-driven system.</p>
+              <div class="project-tech">
+                <span class="tech-tag">AWS CDK</span>
+                <span class="tech-tag">Python</span>
+                <span class="tech-tag">OpenAI API</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="project-card">
+            <div class="project-image"></div>
+            <div class="project-content">
+              <h3 class="project-title">IAM Account Analyzer Tool</h3>
+              <p class="project-desc">Developed an IAM analysis tool that aggregates organizational accounts, identifies unused or non-compliant resources, and enables automated remediation. The solution integrates multiple APIs, processes data through AWS Glue, and stores results in a queryable database for security rule enforcement.</p>
+              <div class="project-tech">
+                <span class="tech-tag">Database</span>
+                <span class="tech-tag">AWS</span>
+                <span class="tech-tag">IAM</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="contact">
+        <h2>Get In Touch</h2>
+        <p>I'm always open to discussing new projects, creative ideas, or doing a CTF. Feel free to reach out through any of the following channels:</p>
+        
+        <div class="contact-grid">
+          <div class="contact-card">
+            <div class="contact-icon">
+              <i class="fab fa-linkedin-in"></i>
+            </div>
+            <h3>LinkedIn</h3>
+            <a href="https://www.linkedin.com/in/zach-kehoe-6855bb266/" target="_blank">Zach-Kehoe</a>
+          </div>
+          
+          <div class="contact-card">
+            <div class="contact-icon">
+              <i class="fab fa-github"></i>
+            </div>
+            <h3>GitHub</h3>
+            <a href="https://github.com/ghostraptor03" target="_blank">github.com/ghostraptor03</a>
+          </div>
+          
+          <div class="contact-card">
+            <div class="contact-icon">
+              <i class="fas fa-envelope"></i>
+            </div>
+            <h3>Email</h3>
+            <a href="mailto:zachtkehoe@outlook.com">zachtkehoe@outlook.com</a>
+          </div>
+        </div>
+      </section>
+
+      <footer class="mobile-footer">
+        <p>© 2025 Zach Kehoe. All rights reserved.</p>
+      </footer>
+    </main>
+  </div>
+  
+  <script>
+    // Smooth scrolling for navigation
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          window.scrollTo({
+            top: target.offsetTop - 80,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+    
+    // Set active navigation link based on scroll position
+    window.addEventListener('scroll', () => {
+      const sections = document.querySelectorAll('section');
+      const navLinks = document.querySelectorAll('.nav-links a');
+      
+      let current = '';
+      
+      sections.forEach(section => {
+        const sectionTop = section.offsetTop;
+        const sectionHeight = section.clientHeight;
+        
+        if (pageYOffset >= sectionTop - 150) {
+          current = section.getAttribute('id');
+        }
+      });
+      
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href').includes(current)) {
+          link.classList.add('active');
+        }
+      });
+    });
+    
+    // Initialize with about section active
+    document.querySelector('a[href="#about"]').classList.add('active');
+  </script>
+</body>
+</html>
